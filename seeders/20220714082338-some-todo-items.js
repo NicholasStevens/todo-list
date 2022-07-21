@@ -8,12 +8,28 @@ module.exports = {
         {
           task: "Read email",
           deadline: "morning",
+          todoListId: 3,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           task: "Send report",
           deadline: "lunchtime",
+          todoListId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          task: "Do Filing",
+          deadline: "lunchtime",
+          todoListId: 3,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          task: "Shopping",
+          deadline: "lunchtime",
+          todoListId: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

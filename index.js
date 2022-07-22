@@ -40,6 +40,21 @@ app.get("/users/:userId", async (req, res, next) => {
   }
 });
 
+app.put("/users/:userId", async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const userToUpdate = await User.findByPk(userId);
+    if (!userToUpdate) {
+      res.status(404).send("User not found");
+    } else {
+      const updatedUser = await userToUpdate.update(req.body);
+      res.json(updatedUser);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`listening on port:${PORT}`);
 });

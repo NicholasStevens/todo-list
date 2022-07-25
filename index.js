@@ -78,10 +78,10 @@ app.post("/todoLists", async (req, res, next) => {
   }
 });
 
-app.put("todoLists/:listId", async (req, res, next) => {
+app.put("/todoLists/:listId", async (req, res, next) => {
   try {
     const listId = parseInt(req.params.listId);
-    const listToUpdate = await List.findByPk(listId);
+    const listToUpdate = await Lists.findByPk(listId);
     if (!listToUpdate) {
       res.status(404).send("List not found!");
     } else {

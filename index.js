@@ -5,6 +5,7 @@ const app = express();
 const PORT = 4000;
 
 const User = require("./models").user;
+const Lists = require("./models").todoList;
 
 app.use(express.json());
 
@@ -49,6 +50,43 @@ app.put("/users/:userId", async (req, res, next) => {
     } else {
       const updatedUser = await userToUpdate.update(req.body);
       res.json(updatedUser);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.get("/todoLists", async (req, res, next) => {
+  try {
+    const todoLists = await Lists.findAll();
+    if (!todoLists) {
+      res.status(404).send("No Todo Lists found");
+    } else {
+      res.json(todoLists);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.post("/todoLists", async (req, res, next) => {
+  try {
+    const newList = await Lists.create(req.body);
+    res.json(newList);
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.put("todoLists/:listId", async (req, res, next) => {
+  try {
+    const listId = parseInt(req.params.listId);
+    const listToUpdate = await List.findByPk(listId);
+    if (!listToUpdate) {
+      res.status(404).send("List not found!");
+    } else {
+      const updatedList = await listToUpdate.update(req.body);
+      res.json(updatedList);
     }
   } catch (e) {
     next(e);

@@ -93,6 +93,82 @@ app.put("/todoLists/:listId", async (req, res, next) => {
   }
 });
 
+app.get("/users/:userId/lists", async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const user = await User.findByPk(userId, {
+      include: [Lists],
+    });
+    if (user) {
+      res.send(user.todoLists);
+    } else {
+      res.status(404).send("User not found");
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.get("/users/:userId/lists/:listId", async (req, res, next) => {
+  try {
+    const listId = parseInt(req.params.listId);
+    const oneList = await Lists.findByPk(listId);
+    if (!oneList) {
+      res.status(404).send("List not found");
+    } else {
+      res.json(oneList);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.post("/users/:userId/lists", async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const user = await User.findByPk(userId);
+    if (!user) {
+      res.status(404).send("User not vaild");
+    } else {
+      const newList = await Lists.create({ userId, ...req.body });
+      res.json(newList);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.delete("/lists/:listId", async (req, res, next) => {
+  try {
+    const listId = parseInt(req.params.listId);
+    const listToDelete = await Lists.findByPk(listId);
+    if (!listToDelete) {
+      res.status(404).send("List not found");
+    } else {
+      const deleteList = await listToDelete.destroy();
+      res.status(204).send();
+      res.json(deleteList);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.delete("/users/:userId/lists", async (req, res, next) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const user = await User.findByPk(userId, { include: [Lists] });
+    if (!user) {
+      res.status(404).send("User not found");
+    } else {
+      user.todoLists.forEach(async (list) => await list.destroy());
+      res.status(204).send();
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`listening on port:${PORT}`);
 });

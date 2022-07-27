@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      todoItem.belongsTo(models.todoList, { foreignkey: "todoList" });
+      todoItem.belongsTo(models.todoList, { foreignKey: "todoListId" });
+      todoItem,
+        this.belongsToMany(models.tag, {
+          through: "itemTags",
+          foreignKey: "todoItemId",
+        });
     }
   }
   todoItem.init(

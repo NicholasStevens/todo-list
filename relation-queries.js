@@ -55,4 +55,4 @@ async function itemsWithTags() {
   const items = await todoItem.findAll({ include: [tag] });
   return items.map((item) => item.get({ plain: true }));
 }
-itemsWithTags().then((result) => console.log(result));
+itemsWithTags().then((items) => console.log("items with tags", items));
